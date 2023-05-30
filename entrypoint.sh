@@ -36,7 +36,7 @@ commit=$(git rev-parse HEAD)
 
 if [ "$tag_commit" == "$commit" ]; then
     echo "No new commits since previous tag. Skipping..."
-    echo ::set-output name=tag::$tag
+    echo "tag=$tag" >> "$GITHUB_OUTPUT"
     exit 0
 fi
 
@@ -58,12 +58,12 @@ if [[ $log =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
   echo "Found commit with semver informations"
   if [ $new == $tag ]; then
     echo "new and old tag same! Skipping..."
-    echo ::set-output name=tag::$tag
+    echo "tag=$tag" >> "$GITHUB_OUTPUT"
     exit 0
   fi
   else
     echo "No semver information found in last commits. Skipping..."
-    echo ::set-output name=tag::$tag
+    echo "tag=$tag" >> "$GITHUB_OUTPUT"
     exit 0
 fi
 
@@ -91,16 +91,16 @@ fi
 echo "new Tag is: $new"
 
 # set outputs
-echo ::set-output name=new_tag::$new
+echo "new_tag=$new" >> "$GITHUB_OUTPUT"
 
 # use dry run to determine the next tag
 if $dryrun
 then
-    echo ::set-output name=tag::$tag
+    echo "tag=$tag" >> "$GITHUB_OUTPUT"
     exit 0
 fi
 
-echo ::set-output name=tag::$new
+echo "tag=$new" >> "$GITHUB_OUTPUT"
 
 
 if $pre_release
