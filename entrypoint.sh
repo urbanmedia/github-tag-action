@@ -3,10 +3,11 @@
 # config
 default_semvar_bump=${DEFAULT_BUMP:-patch}
 with_v=${WITH_V:-false}
-release_branches=${RELEASE_BRANCHES:-master}
+release_branches=${RELEASE_BRANCHES:-tmp_master}
 custom_tag=${CUSTOM_TAG}
 source=${SOURCE:-.}
 dryrun=${DRY_RUN:-false}
+create_release=${CREATE_RELEASE:-false}
 
 # see https://github.blog/2022-04-12-git-security-vulnerability-announced/
 git config --global --add safe.directory /github/workspace
@@ -128,9 +129,29 @@ EOF
 
 if [ $? -eq 0 ]
 then
-  echo "Success"
-  exit 0
+  echo "Tag created successfully"
 else
-  echo "curl failed" >&2
+  echo "Error while creating tag" >&2
+  exit 1
+fi
+
+if $create_release
+then
+  gh release create "$tag" \
+    --repo="$GITHUB_REPOSITORY" \
+    --title="${new}" \
+    --generate-notes \
+    --notes-start-tag="${$tag}";
+else
+  echo "Skipping release creation"
+  exit 0;
+fi
+
+if [ $? -eq 0 ]
+then
+  echo "Release created successfully"
+  exit 0;
+else
+  echo "Error while creating release" >&2
   exit 1
 fi
