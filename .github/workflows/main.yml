@@ -15,3 +15,4 @@ jobs:
         uses: urbanmedia/github-tag-action@tmp_master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CREATE_RELEASE: true
