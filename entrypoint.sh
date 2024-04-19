@@ -137,7 +137,7 @@ fi
 
 if $create_release
 then
-  gh release create "${tag}" \
+  gh release create "${new}" \
     --repo="$GITHUB_REPOSITORY" \
     --title="${new}" \
     --generate-notes \
