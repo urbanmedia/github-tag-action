@@ -137,11 +137,11 @@ fi
 
 if $create_release
 then
-  gh release create "$tag" \
+  gh release create "${tag}" \
     --repo="$GITHUB_REPOSITORY" \
     --title="${new}" \
     --generate-notes \
-    --notes-start-tag="${$tag}";
+    --notes-start-tag="${tag}";
 else
   echo "Skipping release creation"
   exit 0;
